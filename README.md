@@ -1,15 +1,12 @@
 # Lost Battlecode replays
 
-The downloader saves
+GitHub Actions checks the team's Battlecode history every hour and saves
 **each individual game we lost**, including losses inside a series we won.
 Five-game and larger series are inspected game by game. Wins and draws are skipped.
 Both team A and team B are handled.
 
-The workflow runs manually from **Actions → Download lost-match replays →
-Run workflow**. The hourly schedule is prepared but disabled until a $0 Actions
-budget with **Stop usage when budget limit is reached** has been confirmed.
-Then uncomment `schedule` in the workflow. GitHub schedules can be delayed when
-runners are busy.
+The workflow also runs manually from **Actions → Download lost-match replays →
+Run workflow**. GitHub schedules can be delayed when runners are busy.
 
 ## Archive
 
@@ -34,7 +31,7 @@ reaches the limit. Losses already outside that window cannot be discovered here.
 
 ## Authentication
 
-The private repository uses the Actions secret **`BATTLECODE_API_KEY`**, configured
+The repository uses the Actions secret **`BATTLECODE_API_KEY`**, configured
 from the existing team key. Replace it under **Settings → Secrets and variables →
 Actions** if the key is rotated. The key is never committed. Authorization is
 stripped before following any replay redirect to a signed download URL.
@@ -54,11 +51,9 @@ Scheduling and token permissions follow the
 
 ## Cost
 
-The action uses the standard Ubuntu runner and stores replays in Git rather than
-paid Actions artifacts or Git LFS. Hourly polling is about 720–744 runs a month;
-routine runs should usually take about one minute, while the initial historical
-download takes longer. This uses the repository owner's shared Actions allowance
-(2,000 minutes/month on GitHub Free, 3,000 on Pro). Other repositories also use
-that allowance. To guarantee zero paid usage, configure an Actions budget of $0
-with **Stop usage when budget limit is reached** in the owner's billing settings.
-The schedule alone cannot guarantee zero charges if paid overages are enabled.
+This repository is public. The standard Ubuntu GitHub Actions runner is free
+for public repositories. Replays are stored in ordinary Git; this workflow does
+not use paid Actions artifacts, Git LFS, or larger runners. The owner's Actions
+budget is also $0 with **Stop usage when budget limit is reached** enabled.
+
+See [GitHub Actions billing](https://docs.github.com/en/billing/concepts/product-billing/github-actions).
