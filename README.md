@@ -20,6 +20,19 @@ the team's submissions API. This identifies the actual bot that played, includin
 old queued matches. Names are retained in full; slashes and control characters are
 replaced with underscores so they cannot create unintended directories.
 
+Some tournament replays contain the team name instead of a submission ID.
+Their losses go in `replays/version unknown - <replay bot name>/YYYY-MM-DD/`.
+Their version and submission ID are recorded as `null` in the index; no version
+is guessed from upload times.
+
+## Repository files
+
+- `.github/workflows/download-losses.yml`: hourly and manual download jobs, with automatic commits.
+- `scripts/download_losses.py`: API access, loss filtering, replay downloads, index, and saved state.
+- `scripts/replay_header.py`: reads our bot ID from the replay header for version grouping.
+- `tests/test_download_losses.py`: series filtering, both team sides, pending games, redirects, and headers.
+- `AGENTS.md`: points contributors to this README for the directory and file structure.
+
 The action commits new files back to `main` with GitHub's built-in token.
 It retries transient API errors and incomplete series. Existing replays are not
 downloaded again. Partial successful downloads are saved even when a run fails.

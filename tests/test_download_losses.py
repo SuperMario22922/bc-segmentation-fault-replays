@@ -101,6 +101,18 @@ class Tests(unittest.TestCase):
             self.assertEqual(archive(api, directory), 0)
             self.assertEqual(api.downloads, [])
 
+    def test_tournament_team_name_archived_without_guessing_version(self):
+        api = FakeAPI("b")
+        api.fetch = lambda path: replay("", "segmentation fault")
+        with tempfile.TemporaryDirectory() as directory:
+            self.assertEqual(archive(api, directory), 2)
+            folder = Path(directory) / "version unknown - segmentation fault" / "2026-10-01"
+            self.assertTrue((folder / "M13.replay").exists())
+            index = json.loads((Path(directory) / "index.json").read_text())
+            self.assertIsNone(index["games"]["13"]["version"])
+            self.assertEqual(index["games"]["13"]["replay_bot_id"], "segmentation fault")
+            self.assertEqual(archive(api, directory), 0)
+
     def test_redirect_does_not_forward_authorization(self):
         received = []
         class Handler(BaseHTTPRequestHandler):

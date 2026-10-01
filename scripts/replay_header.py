@@ -1,7 +1,7 @@
 """Read the bot IDs from the official packed Cap'n Proto replay header.
 
 Replay's map, botA and botB are pointer fields 0, 1 and 2. No game events are
-decoded. Based on the Replay schema in the official unswbc 1.2.2 viewer.
+decoded. Based on the Replay schema in the official unswbc 1.2.2/1.2.3 viewers.
 """
 import gzip
 import struct

@@ -114,12 +114,24 @@ def archive(api, root):
                         raise RuntimeError(f"Game {game_id} returned an empty or invalid replay")
                     try:
                         played_id = bot_ids(payload)[0 if side == "a" else 1]
-                        submission = submissions[played_id]
                     except (ValueError, IndexError, KeyError, struct.error, OSError):
-                        raise RuntimeError(f"Cannot identify our submission for game {game_id}") from None
+                        raise RuntimeError(f"Cannot read the replay header for game {game_id}") from None
+                    if played_id not in submissions and played_id.isdecimal():
+                        try:
+                            submissions[played_id] = api.get(f"submissions/{played_id}")
+                        except RuntimeError:
+                            pass
+                    submission = submissions.get(played_id)
+                    if submission is None:
+                        # Tournament exports can use a team name, not a submission ID.
+                        # Archive the loss without inventing its bot version.
+                        submission = {"id": None, "version": None,
+                                      "name": played_id or "unidentified bot"}
+                        print(f"M{game_id}: submission version unavailable in replay/API", flush=True)
                     # Preserve the full name, replacing only filesystem separators.
                     name = re.sub(r'[/\\\x00-\x1f]', '_', submission["name"])
-                    folder = f"v{submission['version']} - {name}"
+                    version = f"v{submission['version']}" if submission["version"] is not None else "version unknown"
+                    folder = f"{version} - {name}"
                     relative = Path(folder) / date / f"M{game_id}.replay"
                     target = root / relative
                     target.parent.mkdir(parents=True, exist_ok=True)
@@ -130,7 +142,11 @@ def archive(api, root):
                     print(f"Downloaded M{game_id}: {game['mapName']} vs {opponent}", flush=True)
                 else:
                     relative = Path(existing["path"])
-                    submission = submissions[str(existing["submission_id"])]
+                    played_id = existing.get("replay_bot_id", str(existing["submission_id"]))
+                    submission = submissions.get(str(existing["submission_id"]), {
+                        "id": existing["submission_id"], "version": existing["version"],
+                        "name": existing["bot_name"],
+                    })
                 index["games"][str(game_id)] = {
                     "battle_id": battle_id, "map": game["mapName"], "opponent": opponent,
                     "our_side": side, "ranked": match["ranked"], "date": date,
@@ -138,6 +154,7 @@ def archive(api, root):
                     "sha256": hashlib.sha256(target.read_bytes()).hexdigest(),
                     "submission_id": submission["id"], "version": submission["version"],
                     "bot_name": submission["name"],
+                    "replay_bot_id": played_id,
                 }
             if all_done:
                 completed.add(battle_id)
