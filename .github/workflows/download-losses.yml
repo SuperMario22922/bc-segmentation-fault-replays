@@ -1,0 +1,39 @@
+name: Download lost-match replays
+
+on:
+  # Enable after confirming a $0 Actions budget with Stop usage enabled:
+  # schedule:
+  #   - cron: '17 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: replay-archive
+  cancel-in-progress: false
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: main
+      - name: Test downloader
+        run: python3 -m unittest discover -s tests -v
+      - name: Download individual lost games
+        env:
+          BATTLECODE_API_KEY: ${{ secrets.BATTLECODE_API_KEY }}
+        run: python3 scripts/download_losses.py
+      - name: Commit downloaded replays
+        if: ${{ always() && !cancelled() }}
+        run: |
+          if [ ! -d replays ]; then exit 0; fi
+          git add replays
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Archive lost-match replays'
+          git push origin HEAD:main
