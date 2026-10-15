@@ -26745,6 +26745,36 @@
       "submission_id": 14409,
       "version": 19
     },
+    "1998073": {
+      "battle_id": 1998072,
+      "bot_name": "portal-pathing-v18p-20261002",
+      "bytes": 30587,
+      "date": "2026-10-15",
+      "map": "Caution",
+      "opponent": "sausage bots",
+      "our_side": "b",
+      "path": "v19 - portal-pathing-v18p-20261002/2026-10-15/M1998073.replay",
+      "ranked": true,
+      "replay_bot_id": "14409",
+      "sha256": "58ae12809456a55bbfb8ea081c44d8795ecad6f2c70dc3dc135e61d1a5df5c2e",
+      "submission_id": 14409,
+      "version": 19
+    },
+    "2004141": {
+      "battle_id": 2004141,
+      "bot_name": "portal-pathing-v18p-20261002",
+      "bytes": 9647,
+      "date": "2026-10-15",
+      "map": "Caution",
+      "opponent": "180 Deg",
+      "our_side": "b",
+      "path": "v19 - portal-pathing-v18p-20261002/2026-10-15/M2004141.replay",
+      "ranked": true,
+      "replay_bot_id": "14409",
+      "sha256": "a7901af55437a1ae5eb93aa5727f8c8dcdf7aa7ed7197b1264e3f6d2af275995",
+      "submission_id": 14409,
+      "version": 19
+    },
     "488403": {
       "battle_id": 488403,
       "bot_name": "mybot-2026-09-28-2209",
