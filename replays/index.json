@@ -26775,6 +26775,21 @@
       "submission_id": 14409,
       "version": 19
     },
+    "2012667": {
+      "battle_id": 2012663,
+      "bot_name": "portal-pathing-v18p-20261002",
+      "bytes": 291795,
+      "date": "2026-10-15",
+      "map": "Portals",
+      "opponent": "sausage bots",
+      "our_side": "b",
+      "path": "v19 - portal-pathing-v18p-20261002/2026-10-15/M2012667.replay",
+      "ranked": true,
+      "replay_bot_id": "14409",
+      "sha256": "98b06a70843eebbeba5aedaacb3f8ce0715c02ed790fa1dcbe6a5597f0594e3b",
+      "submission_id": 14409,
+      "version": 19
+    },
     "488403": {
       "battle_id": 488403,
       "bot_name": "mybot-2026-09-28-2209",
